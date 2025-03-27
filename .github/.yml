@@ -1,26 +1,33 @@
-name: Build with Java
+name: LegalAI CI
 
 on:
   push:
     branches:
-      - main  # Poți schimba `main` cu altă ramură dacă dorești
+      - main  # Rulează workflow-ul când dai push pe `main`
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Alege sistemul de operare, poți folosi și `windows-latest` sau `macos-latest`
+    runs-on: ubuntu-latest  # Rulează pe Ubuntu
 
     steps:
-    - name: Check out code
-      uses: actions/checkout@v2
+      - name: Check out repository
+        uses: actions/checkout@v3  # Clonează codul în runner
 
-    - name: Set up Java
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'  # Schimbă versiunea de Java dacă vrei altă versiune
-        distribution: 'adoptopenjdk'  # Poți folosi 'openjdk' sau 'adoptopenjdk'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'  # Folosește Python 3.12
 
-    - name: Build with Maven (sau Gradle, dacă folosești alt tool)
-      run: |
-        mvn clean install  # Dacă folosești Maven pentru build
-        # Sau, dacă folosești Gradle:
-        # gradle build
+      - name: Install Java (necesar pentru LanguageTool)
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'  # Poți folosi și 'temurin' sau 'zulu'
+          java-version: '11'  # Java 11, recomandat pentru LanguageTool
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Instalează toate dependențele
+
+      - name: Run script
+        run: python mount/src/legalai/app.py  # Rulează scriptul tău
