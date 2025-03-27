@@ -1,0 +1,26 @@
+name: Build with Java
+
+on:
+  push:
+    branches:
+      - main  # Poți schimba `main` cu altă ramură dacă dorești
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Alege sistemul de operare, poți folosi și `windows-latest` sau `macos-latest`
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'  # Schimbă versiunea de Java dacă vrei altă versiune
+        distribution: 'adoptopenjdk'  # Poți folosi 'openjdk' sau 'adoptopenjdk'
+
+    - name: Build with Maven (sau Gradle, dacă folosești alt tool)
+      run: |
+        mvn clean install  # Dacă folosești Maven pentru build
+        # Sau, dacă folosești Gradle:
+        # gradle build
