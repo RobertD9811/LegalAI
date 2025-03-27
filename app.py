@@ -44,4 +44,4 @@ def correct_grammar(text):
     return tool.correct(text)
 
 def generate_word_doc(variable_data, fixed_text, output_name):
-    """Generează un fișier
+    """Generează un fișier"""
